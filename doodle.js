@@ -141,7 +141,7 @@ function registerInputListeners () {
 // Initialize Orbiter, which handles multiuser communications
 function initOrbiter () {
   // Create the Orbiter instance, used to connect to and communicate with Union
-  orbiter = new net.user1.orbiter.Orbiter();
+  /* orbiter = new net.user1.orbiter.Orbiter(); */
  
   // If required JavaScript capabilities are missing, abort
   if (!orbiter.getSystem().isJavaScriptCompatible()) {

@@ -1,8 +1,9 @@
-//==============================================================================
+/==============================================================================
 // LOCAL USER VARIABLES
 //==============================================================================
 // A flag to track whether the user is drawing or not
 var isPenDown = false;
+var isBarDown = false;
  
 // Line defaults
 var defaultLineColor = "#AAAAAA";
@@ -34,6 +35,7 @@ var DrawingCommands = {LINE_TO:       "lineTo",
                        SET_THICKNESS: "setThickness",
                        SET_COLOR:     "setColor"};
  
+ var bar;
  
 //==============================================================================
 // TOUCH-DEVICE VARIABLES
@@ -49,12 +51,18 @@ window.onload = init;
 // Main initialization function
 function init () {
   initCanvas();
+  initMovementBar();
   registerInputListeners();
   iPhoneToTop();
- 
-  setStatus("Connecting to UnionDraw...");
+  console.log("Test");
 }
  
+//set up movement bar
+function initMovementBar(){
+    bar = document.getElementById("controls");
+    bar.onmousedown = barDown;
+}
+
 // Set up the drawing canvas
 function initCanvas () {
   // Retrieve canvas reference
@@ -143,6 +151,10 @@ function touchUpListener () {
 //==============================================================================
 // MOUSE-INPUT EVENT LISTENERS
 //==============================================================================
+function barDown(e){
+    isBarDown = true;
+    console.log("Selected");
+}
 // Triggered when the mouse is pressed down
 function pointerDownListener (e) {
   // If this is an iPhone, iPad, Android, or other touch-capable device, ignore
@@ -179,18 +191,26 @@ function pointerMoveListener (e) {
   if (hasTouch) {
     return;
   }
-  var event = e || window.event; // IE uses window.event, not e
-  var mouseX = event.clientX - canvas.offsetLeft;
-  var mouseY = event.clientY - canvas.offsetTop;
+  if(isBarDown){
+    bar.position = "absolute";
+    bar.position.top=e.clientY;
+    bar.position.left=e.clientX - canvas.width/2;
+    bar.color = "blue";
+    console.log("Moved");
+  }else{
+    var event = e || window.event; // IE uses window.event, not e
+    var mouseX = event.clientX - canvas.offsetLeft;
+    var mouseY = event.clientY - canvas.offsetTop;
  
-  // Draw a line if the pen is down
-  penMove(mouseX, mouseY);
+    // Draw a line if the pen is down
+    penMove(mouseX, mouseY);
  
-  // Prevent default browser actions, such as text selection
-  if (event.preventDefault) {
-    event.preventDefault();
-  } else {
-    return false;  // IE
+    // Prevent default browser actions, such as text selection
+    if (event.preventDefault) {
+      event.preventDefault();
+    } else {
+      return false;  // IE
+    }
   }
 }
  
@@ -223,13 +243,13 @@ function thicknessSelectListener (e) {
   //   attrScope (The room)
   //   attrOptions (An integer whose bits specify options. "4" means
   //                the attribute should be shared).
-  // msgManager.sendUPC(UPC.SET_CLIENT_ATTR,
-  //                    orbiter.getClientID(),
-  //                    "",
-  //                    Attributes.THICKNESS,
-  //                    newThickness,
-  //                    roomID,
-  //                    "4");
+  msgManager.sendUPC(UPC.SET_CLIENT_ATTR,
+                     orbiter.getClientID(),
+                     "",
+                     Attributes.THICKNESS,
+                     newThickness,
+                     roomID,
+                     "4");
   // After the user selects a value in the drop-down menu, the iPhone
   // automatically scrolls the page, so scroll back to the top-left.
   iPhoneToTop();
@@ -268,6 +288,13 @@ function penDown (x, y) {
 // Draws a line if the pen is down.
 function penMove (x, y) {
   if (isPenDown) {
+    // Buffer the new position for broadcast to other users. Buffer a maximum
+    // of 100 points per second.
+    if ((new Date().getTime() - lastBufferTime) > 10) {
+      bufferedPath.push(x + "," + y);
+      lastBufferTime = new Date().getTime();
+    }
+ 
     // Draw the line locally.
     drawLine(localLineColor, localLineThickness, localPen.x, localPen.y, x, y);
  
@@ -281,6 +308,7 @@ function penMove (x, y) {
 // touch-input device moves.
 function penUp () {
   isPenDown = false;
+  isBarDown = false;
 }
  
 //==============================================================================
@@ -325,4 +353,3 @@ function getValidThickness (value) {
   var thickness = isNaN(value) ? defaultLineThickness : value;
   return Math.max(1, Math.min(thickness, maxLineThickness));
 }
-

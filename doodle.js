@@ -137,6 +137,12 @@ function registerInputListeners () {
   document.getElementById("thickness").onchange = thicknessSelectListener;
   document.getElementById("color").onchange = colorSelectListener;
 }
+
+function saveCanvas (canvasID){
+    var canvas = document.getElementById(canvasID);
+    var img    = canvas.toDataURL("image/png");
+    document.write('<img src="'+img+'"/>');
+}
  
 // Initialize Orbiter, which handles multiuser communications
 function initOrbiter () {

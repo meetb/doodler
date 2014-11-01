@@ -34,13 +34,6 @@ var DrawingCommands = {LINE_TO:       "lineTo",
                        SET_THICKNESS: "setThickness",
                        SET_COLOR:     "setColor"};
  
-//==============================================================================
-// TIMER VARIABLES
-//==============================================================================
-// The ID for a timer that sends the user's drawing path on a regular interval
-var broadcastPathIntervalID;
-// The ID for a timer that executes drawing commands sent by remote users
-var processDrawingCommandsIntervalID;
  
 //==============================================================================
 // TOUCH-DEVICE VARIABLES
@@ -58,8 +51,6 @@ function init () {
   initCanvas();
   registerInputListeners();
   iPhoneToTop();
- 
-  setStatus("Connecting to UnionDraw...");
 }
  
 // Set up the drawing canvas
@@ -100,7 +91,7 @@ function registerInputListeners () {
 function saveCanvas (canvasID){
     var canvas = document.getElementById(canvasID);
     var img    = canvas.toDataURL("image/png");
-    document.write('<img src="'+img+'"/>');
+    console.log(img);
 }
  
 //==============================================================================
@@ -270,12 +261,6 @@ function penDown (x, y) {
   isPenDown = true;
   localPen.x = x;
   localPen.y = y;
- 
-  // Send this user's new pen position to other users.
-  broadcastMove(x, y);
- 
-  // Begin sending this user's drawing path to other users every 500 milliseconds.
-  broadcastPathIntervalID = setInterval(broadcastPath, 500);
 }
  
 // Draws a line if the pen is down.

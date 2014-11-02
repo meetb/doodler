@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+
+<head></head>
+
+<body>
+<style>
+#entry input
+{
+    width:100%;
+    box-sizing:border-box;
+    -moz-box-sizing:border-box;
+}
+</style>
+
+<div id="dragMe">
+    <table style="width:100%">
+        <tr>
+            <td><input id="entry" type="text" /></td>
+            <td><input id="entry" type="text" /></td> 
+            <td><input id="entry" type="text" /></td> 
+        </tr>
+        <tr>
+            <td><input id="entry" type="text" /></td>
+            <td><input id="entry" type="text" /></td> 
+            <td><input id="entry" type="text" /></td> 
+        </tr>
+    </table>
+</div>
+
+<script src="draggable.js"></script>
+<script>
+    var matrix = document.getElementById('dragMe');
+    draggable(matrix);
+    var setInfo = function(type) { return function(event) {
+      console.log(event.x+", "+event.y);
+    }};
+    matrix.whenDragging(setInfo());
+    //whenDragStarts, whenDragging and whenDragStops all work
+</script>
+
+
+</body>
+
+</html>

@@ -308,7 +308,7 @@ function pointerMoveListener (e) {
 	height = mouseY;
 	canvas.height = height<50?50:height;
   }else if(isBarDown){
-    bar.style.top = (e.clientY + body.scrollTop-canvas.height)+"px";
+    bar.style.top = (e.clientY + body.scrollTop)+"px";
     bar.style.left = (e.clientX - canvas.width/2)+"px";
 	canvas.style.top = (e.clientY + body.scrollTop-canvas.height)+"px";
     canvas.style.left = (e.clientX - canvas.width/2)+"px";

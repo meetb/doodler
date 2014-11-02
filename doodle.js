@@ -3,8 +3,8 @@
 //==============================================================================
 // A flag to track whether the user is drawing or not
 var isPenDown = false;
-var isBarDown = false;
-var isCornerDown = false;
+var isBarDown_array = new Array()
+var isCornerDown_array = new Array()
  
 // Line defaults
 var defaultLineColor = "#AAAAAA";
@@ -35,8 +35,8 @@ var DrawingCommands = {LINE_TO:       "lineTo",
                        MOVE_TO:       "moveTo",
                        SET_THICKNESS: "setThickness",
                        SET_COLOR:     "setColor"};
+var bar_array = new Array()
  
- var bar;
  var body;
  
 //==============================================================================
@@ -57,18 +57,29 @@ function init () {
   canvas_array.push(document.getElementById("canvas0"));
   canvas_array.push(document.getElementById("canvas1"));
   initCanvas("canvas0");
-  initMovementBar('movement0');
   initCanvas("canvas1");
+  initMovementBar('movement0');
   initMovementBar('movement1');
   registerInputListeners();
+  var i;
+  for (i = 0; i < canvas_array.length; i++){
+    isBarDown_array[i] = false;
+    isCornerDown_array[i] = false;
+  }
   iPhoneToTop();
   console.log("Test");
 }
  
 //set up movement bar
 function initMovementBar(movementBarId){
-    bar = document.getElementById(movementBarId);
-    bar.onmousedown = barDown;
+    var idNum = parseInt(movementBarId.slice(8));
+    var i;
+    for (i = 0; i < canvas_array.length; i++){
+        if (i === idNum){
+            bar_array[i] = document.getElementById(movementBarId);
+            bar_array[i].onmousedown = barDown;
+        }
+    }
 }
 
 // Set up the drawing canvas
@@ -187,11 +198,31 @@ function touchUpListener () {
 // MOUSE-INPUT EVENT LISTENERS
 //==============================================================================
 function barDown(e){
+    var idNum = parseInt(e.target.getAttribute('id').slice(8));
+    console.log("barDown target is:");
+    console.log(e.target);
+    console.log(idNum);
+    var i;
+    var bar;
+    for (i = 0; i < bar_array.length; i++){
+        if (i === idNum){
+            bar = bar_array[i];
+        }
+    }
     var rect = bar.getBoundingClientRect();
     //console.log(rect.right+"-20<"+e.clientX);
-	if(rect.right-30 < e.clientX)
-	  isCornerDown=true;
-    isBarDown = true;
+	if(rect.right-30 < e.clientX){
+      for (i = 0; i < isCornerDown_array.length; i++){
+        if (i === idNum){
+	        isCornerDown_array[i]=true;
+        }
+      }
+    }
+    for (i = 0; i < isBarDown_array.length; i++){
+        if (i === idNum){
+            isBarDown_array[i] = true;
+        }
+    }
     //console.log("Selected");
 }
 // Triggered when the mouse is pressed down
@@ -233,8 +264,19 @@ function pointerMoveListener (e) {
     return;
   }
   var event = e || window.event; // IE uses window.event, not e
+  var canvas = e.target;
   var mouseX = event.clientX - canvas.offsetLeft;
   var mouseY = event.clientY - canvas.offsetTop;
+  var isCornerDown;
+  var idNum = parseInt(e.target.getAttribute('id').slice(6));
+  var i;
+  for (i = 0; i < isCornerDown_array.length; i++){
+    if (i === idNum){
+      isCornerDown = isCornerDown_array[i];
+      isBarDown = isBarDown_array[i];
+      bar = bar_array[i];
+    }
+  }
   if(isCornerDown){
     rect = canvas.getBoundingClientRect();
 	width = e.clientX - rect.left;
@@ -328,8 +370,11 @@ function penMove (x, y,context) {
 // touch-input device moves.
 function penUp () {
   isPenDown = false;
-  isBarDown = false;
-  isCornerDown= false;
+  var i;
+  for (i = 0; i < isCornerDown_array.length; i++){
+    isBarDown_array[i] = false;
+    isCornerDown_array[i] = false;
+  }
 }
  
 //==============================================================================

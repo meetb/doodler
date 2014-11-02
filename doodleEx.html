@@ -32,7 +32,7 @@ html, body {
   top: 30px;
 }
  
-#controls {
+.controls {
   background-color: #AAAAAA;
   position: absolute;
   font-family: Helvetica, Verdana, sans-serif;
@@ -73,11 +73,11 @@ See: http://code.google.com/p/explorercanvas/
 </head>
  
 <body id="body">
-  <canvas id="canvas" style="position:relative"></canvas>
+  <canvas id="canvas0" style="position:relative"></canvas>
   
-  <div id="controls" style="position:relative">
-    <button id="delete" onclick="delete('canvas')">X</button>
-	<button id="dup" onclick="delete('canvas')">DUP</button>
+  <div class="controls" id="movement0" style="position:relative">
+    <button id="delete" onclick="delete('canvas0')">X</button>
+	<button id="dup" onclick="delete('canvas0')">DUP</button>
     Size:
     <select id="thickness" class="fixed">
       <option value="1">1</option>
@@ -99,40 +99,42 @@ See: http://code.google.com/p/explorercanvas/
       <option value="#CC8F2B">#CC8F2B</option>
       <option value="#63631D">#63631D</option>
     </select>
-    <button id="saveCan" onclick="saveCanvas('canvas');">Save</button>
-    <button id="loadImg" onclick="loadImageToCanvas('canvas',saveCanvas('canvas'));">Load</button>
-    <div style="heihgt:30px;width:30px;background-color:#FFFFFF"/>
+    <button id="saveCan0" onclick="saveCanvas('canvas0');">Save</button>
+    <button id="loadImg0" onclick="loadImageToCanvas('canvas0',saveCanvas('canvas0'));">Load</button>
+    <div style="heihgt:30px;width:30px;background-color:#FFFFFF"></div>
+ </div>
+
+  <canvas id="canvas1" style="position:relative"></canvas>
+  
+  <div class="controls" id="movement1" style="position:relative">
+    <button id="delete" onclick="delete('canvas1')">X</button>
+	<button id="dup" onclick="delete('canvas1')">DUP</button>
+    Size:
+    <select id="thickness" class="fixed">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="20">20</option>
+    </select>
+ 
+    Color:
+    <select id="color">
+      <option value="#FFFFFF">#FFFFFF</option>
+      <option value="#AAAAAA">#AAAAAA</option>
+      <option value="#666666">#666666</option>
+      <option value="#000000">#000000</option>
+      <option value="#9BA16C">#9BA16C</option>
+      <option value="#CC8F2B">#CC8F2B</option>
+      <option value="#63631D">#63631D</option>
+    </select>
+    <button id="saveCan0" onclick="saveCanvas('canvas1');">Save</button>
+    <button id="loadImg0" onclick="loadImageToCanvas('canvas1',saveCanvas('canvas0'));">Load</button>
+    <div style="heihgt:30px;width:30px;background-color:#FFFFFF"></div>
  </div>
  
-  <!--The canvas where drawings will be displayed-->
-  <canvas id="canvas0" style="position:relative"></canvas>
-
-  <div id="movement1" style="position:relative">
-    Size:
-    <select id="thickness" class="fixed">
-      <option value="1">1</option>
-      <option value="2">2</option>
-      <option value="3">3</option>
-      <option value="4">4</option>
-      <option value="5">5</option>
-      <option value="10">10</option>
-      <option value="20">20</option>
-    </select>
- 
-    Color:
-    <select id="color">
-      <option value="#FFFFFF">#FFFFFF</option>
-      <option value="#AAAAAA">#AAAAAA</option>
-      <option value="#666666">#666666</option>
-      <option value="#000000">#000000</option>
-      <option value="#9BA16C">#9BA16C</option>
-      <option value="#CC8F2B">#CC8F2B</option>
-      <option value="#63631D">#63631D</option>
-    </select>
-    <button id="saveCan1" onclick="saveCanvas('canvas');">Save</button>
-    <button id="loadImg1" onclick="loadImageToCanvas('canvas',saveCanvas('canvas'));">Load</button>
-  </div>
-  <canvas id="canvas1" style="position:relative"></canvas>
  
   <!--A status text field, for displaying connection information-->
   <div id="status"></div>

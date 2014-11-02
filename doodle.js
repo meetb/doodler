@@ -235,8 +235,8 @@ function pointerDownListener (e) {
   // Determine where the user clicked the mouse.
   var canvas = event.target;
   //console.log(canvas);
-  var mouseX = event.clientX - canvas.offsetLeft;
-  var mouseY = event.clientY - canvas.offsetTop;
+  var mouseX = event.clientX - canvas.offsetLeft + body.scrollLeft;
+  var mouseY = event.clientY - canvas.offsetTop + body.scrollTop;
  
   // Move the drawing pen to the position that was clicked
   penDown(mouseX, mouseY);
@@ -274,8 +274,8 @@ function pointerMoveListener (e) {
   }
   if(idNum==-1){
 	for(i=0;i<canvas_array.length;i++){
-		var mouseX2 = event.clientX - canvas_array[i].offsetLeft;
-		var mouseY2 = event.clientY - canvas_array[i].offsetTop;
+		var mouseX2 = event.clientX - canvas_array[i].offsetLeft + body.scrollLeft;
+		var mouseY2 = event.clientY - canvas_array[i].offsetTop + body.scrollTop;
 		if(mouseX2>0 && mouseX2<=canvas_array[i].width && mouseY2>0
 		&& mouseY2<canvas_array[i].height){
 			penMove(mouseX2, mouseY2,canvas_array[i].getContext('2d'));
@@ -294,8 +294,8 @@ function pointerMoveListener (e) {
   bar = bar_array[idNum];
   var canvas = canvas_array[idNum];
   
-  var mouseX = event.clientX - canvas.offsetLeft;
-  var mouseY = event.clientY - canvas.offsetTop;
+  var mouseX = event.clientX - canvas.offsetLeft + body.scrollLeft;
+  var mouseY = event.clientY - canvas.offsetTop + body.scrollTop;
   console.log(idNum+" "+isCornerDown+" "+isBarDown);
   if(isCornerDown){
     rect = canvas.getBoundingClientRect();
@@ -309,7 +309,7 @@ function pointerMoveListener (e) {
     bar.style.left = (e.clientX - canvas.width/2)+"px";
 	canvas.style.top = (e.clientY + body.scrollTop-canvas.height)+"px";
     canvas.style.left = (e.clientX - canvas.width/2)+"px";
-    bar.style.color = "blue";
+    //bar.style.color = "blue";
   }
 }
  

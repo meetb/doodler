@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Theme</title>
+    <title>Doodler Text Editor</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -34,6 +34,7 @@
     <![endif]-->
 
 </head>
+<meta charset="UTF-8">
 
 <body>
 
@@ -122,14 +123,18 @@
                                 <li>
                                     <a href="#"><i class="fa fa-sitemap fa-fw"></i> Add an Element<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
+                                        
+                                        
+                                        <!--
+                                         OLD CODE FOR SUPERSCRIPT INPUT AND SUBSCRIPT INPUT
                                         <li>
                                             <a href="#"><i class="fa fa-sitemap fa-fw"></i> Superscript<span class="fa arrow"></span></a>
                                             <ul class="nav nav-third-level">
                                                 <li class="sidebar-search">
                                                     <div class="input-group custom-search-form">
-                                                        <input type="text" class="form-control" id="addSuper" placeholder="Input, Field#">
+                                                        <input type="text" class="form-control" id="addSuper" placeholder="Field#">
                                                             <span class="input-group-btn">
-                                                                <button class="btn btn-default" onclick="superS()" type="button">
+                                                                <button id="sup1" class="btn btn-default" onclick="superS()" type="button">
                                                                     Add
                                                                 </button>
                                                             </span>
@@ -142,18 +147,45 @@
                                             <ul class="nav nav-third-level">
                                                 <li class="sidebar-search">
                                                     <div class="input-group custom-search-form">
-                                                        <input type="text" class="form-control" id="addSub" placeholder="Input, Field#">
+                                                        <input type="text" class="form-control" id="addSub" placeholder="Field#">
                                                             <span class="input-group-btn">
-                                                                <button class="btn btn-default" onclick="subS()" type="button">
+                                                                <button id="sub1" class="btn btn-default" onclick="subS()" type="button">
                                                                     Add
                                                                 </button>
                                                             </span>
                                                     </div>
                                                 </li>
                                             </ul>
-
                                         </li>
+                                        -->
+                                         
                                         <li>
+                                            <a>
+                                                <div class="btn-group" data-toggle="buttons">
+                                                    <label class="btn btn-primary active">
+                                                        <input type="radio" name="options" id="option1" autocomplete="off" checked> Norm
+                                                            </label>
+                                                    <label class="btn btn-primary">
+                                                        <input type="radio" name="options" id="option2" autocomplete="off"> SupS
+                                                            </label>
+                                                    <label class="btn btn-primary">
+                                                        <input type="radio" name="options" id="option3" autocomplete="off">
+                                                            SubS
+                                                            </label>
+                                                </div>
+
+                                            </a>
+                                            
+                                            <li class="sidebar-search">
+                                                <div class="input-group custom-search-form">
+                                                    <input type="text" class="form-control" id="inputForm" placeholder="Field#">
+                                                        <span class="input-group-btn">
+                                                            <button id="cin1" class="btn btn-default" onclick="changeInput()" type="button">
+                                                                Add
+                                                            </button>
+                                                        </span>
+                                                        </div>
+                                            </li>
                                             <a> Matrix</a>
                                         </li>
                                     </ul>
@@ -196,10 +228,12 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h4 class="page-header">Start Here</h4>
+                    <h4 class="page-header"><div class="editable">Title...</div></h4>
+                    
                 </div>
                 <div class="col-lg-12" id="area-adder">
                     <!--textarea rows="20" cols="158" name="textarea0"></textarea-->
+                    <!--div class="editable">Input...</div-->
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -238,29 +272,61 @@
             else
                 which.style.display="block";
         }
-        function superS() {
-            var field = parseInt(document.getElementById('addSuper').value.substr(document.getElementById('addSuper').value.length - 1));
+        //old superscript and subscript
+        //function changeInput() {
+            /*var field = parseInt(document.getElementById('addSuper').value.substr(document.getElementById('addSuper').value.length - 1));
             var checker = "textarea" + field;
             var whichOne = document.getElementById(checker);
             whichOne.value += document.getElementById('addSuper').value.substr(0, document.getElementById('addSuper').value.length - 3).sup();
+             */
+            //var text =
+            /*$('#sup1').click(function(){
+                                 var field = parseInt(document.getElementById('addSuper').value.substr(document.getElementById('addSuper').value.length - 1));
+                                 var checker = "textarea" + field;
+                               var text = $('#' + checker).html();
+                               $('#' + checker).html(text + document.getElementById('addSuper').value.substr(0, document.getElementById('addSuper').value.length - 3).sup());
+                               });*/
+            /*$('#cin1').click(function(){
+                             var field = document.getElementById('inputForm').value
+                             var checker = "textarea" + field;
+                             //var noWidth = &#8203 "";
+                             var noWidth = "";
+                             var text = $('#' + checker).html();
+                             if (document.getElementById('#option2').checked) {
+                             $('#' + checker).html(text + noWidth.sup());
+                             }
+                             else if (document.getElementById('#option3').checked) {
+                             $('#' + checker).html(text + noWidth.sub());
+                             }
+                             else if (document.getElementById('#option1').checked) {
+                             $('#' + checker).html(text);
+                             };}
 
-        }
-        function subS() {
-            var field = parseInt(document.getElementById('addSub').value.substr(document.getElementById('addSub').value.length - 1));
+        }*/
+        function changeInput() {
+            var field = document.getElementById('inputForm').value
             var checker = "textarea" + field;
+            var noWidth = "​";
+            var text = document.getElementById(checker).value;
             var whichOne = document.getElementById(checker);
-            var script = "" + document.getElementById('addSub').value.substr(0, document.getElementById('addSub').value.length - 3);
-            whichOne.value += script.sub();
+            
+            if (document.getElementById('option2').checked) {
+                whichOne.innerHTML += noWidth.sup();
+            }
+            else if (document.getElementById('option3').checked) {
+                whichOne.innerHTML += noWidth.sub();
+            }
+            else if (document.getElementById('option1').checked) {
+                whichOne.innerHTML += noWidth;
+            }
         }
         function myFunction() {
             count += 1;
-            var x = document.createElement("textarea");
-            x.cols = "158";
-            x.rows = "20";
+            var x = document.createElement("div");
+            x.innerHTML = "Input...#" + count;
             x.id = "textarea" + count;
             x.style.display = "block";
-            var t = document.createTextNode("This is textarea number: " + count);
-            x.appendChild(t);
+            x.contentEditable = true;
             $("#area-adder").append(x);
         }
     </script>

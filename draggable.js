@@ -1,3 +1,5 @@
+var body = document.getElementById("body");
+
 !(function(moduleName, definition) {
   // Whether to expose Draggable as an AMD module or to the global object.
   if (typeof define === 'function' && typeof define.amd === 'object') define(definition);
@@ -56,9 +58,9 @@
 
     var initialPosition = getInitialPosition(currentElement);
     currentElement.style.left = inPixels(initialPosition.left);
-    currentElement.style.top = inPixels(initialPosition.top);
+    currentElement.style.top = inPixels(initialPosition.top+body.scrollTop);
     currentElement.lastXPosition = event.clientX;
-    currentElement.lastYPosition = event.clientY;
+    currentElement.lastYPosition = event.clientY+body.scrollTop;
 
     var okToGoOn = triggerEvent('start', { x: initialPosition.left, y: initialPosition.top, mouseEvent: event });
     if (!okToGoOn) return;
@@ -123,16 +125,16 @@
     event.returnValue = false;
     var style = currentElement.style;
     var elementXPosition = parseInt(style.left, 10);
-    var elementYPosition = parseInt(style.top, 10);
+    var elementYPosition = parseInt(style.top+body.scrollTop, 10);
 
     var elementNewXPosition = elementXPosition + (event.clientX - currentElement.lastXPosition);
-    var elementNewYPosition = elementYPosition + (event.clientY - currentElement.lastYPosition);
+    var elementNewYPosition = elementYPosition + (event.clientY - currentElement.lastYPosition)+body.scrollTop;
 
     style.left = inPixels(elementNewXPosition);
     style.top = inPixels(elementNewYPosition);
 
     currentElement.lastXPosition = event.clientX;
-    currentElement.lastYPosition = event.clientY;
+    currentElement.lastYPosition = event.clientY+body.scrollTop;
 
     triggerEvent('drag', { x: elementNewXPosition, y: elementNewYPosition, mouseEvent: event });
   }

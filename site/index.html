@@ -333,7 +333,7 @@ canvas{
 			y.className = 'controls';y.id="movement"+doodleCount;
 			y.style.position="absolute";y.style.top=(body.scrollTop+600)+"px";y.style.left="500px";//y.style.z-index="2";
 			var z = document.createElement('button');
-			z.id = "delete"; z.onclick="deleter";z.innerHTML="X";
+			z.id = "del"+doodleCount; z.onclick=deleter;z.innerHTML="X";
 			var w = document.createElement('div');
 			w.id="thingabc"+doodleCount;w.align="right";w.innerHTML="<<<";
 			document.getElementById("body").appendChild(x);

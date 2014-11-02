@@ -131,8 +131,39 @@ See: http://code.google.com/p/explorercanvas/
       <option value="#63631D">#63631D</option>
     </select>
     <button id="saveCan1" onclick="saveCanvas('canvas1');">Save</button>
-    <button id="loadImg1" onclick="loadImageToCanvas('canvas1',saveCanvas('canvas0'));">Load</button>
+    <button id="loadImg1" onclick="loadImageToCanvas('canvas1',saveCanvas('canvas1'));">Load</button>
     <div id="thingabc1" align="right"><<<</div>
+ </div>
+
+  <canvas id="canvas2" style="position:relative"></canvas>
+  
+  <div class="controls" id="movement2" style="position:relative">
+    <button id="delete" onclick="delete('canvas2')">X</button>
+	<button id="dup" onclick="delete('canvas2')">DUP</button>
+    Size:
+    <select id="thickness" class="fixed">
+      <option value="1">1</option>
+      <option value="2">2</option>
+      <option value="3">3</option>
+      <option value="4">4</option>
+      <option value="5">5</option>
+      <option value="10">10</option>
+      <option value="20">20</option>
+    </select>
+ 
+    Color:
+    <select id="color">
+      <option value="#FFFFFF">#FFFFFF</option>
+      <option value="#AAAAAA">#AAAAAA</option>
+      <option value="#666666">#666666</option>
+      <option value="#000000">#000000</option>
+      <option value="#9BA16C">#9BA16C</option>
+      <option value="#CC8F2B">#CC8F2B</option>
+      <option value="#63631D">#63631D</option>
+    </select>
+    <button id="saveCan2" onclick="saveCanvas('canvas2');">Save</button>
+    <button id="loadImg2" onclick="loadImageToCanvas('canvas2',saveCanvas('canvas2'));">Load</button>
+    <div id="thingabc2" align="right"><<<</div>
  </div>
  
  

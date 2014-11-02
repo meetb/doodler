@@ -56,10 +56,13 @@ function init () {
   var canvas0, canvas1;
   canvas_array.push(document.getElementById("canvas0"));
   canvas_array.push(document.getElementById("canvas1"));
+  canvas_array.push(document.getElementById("canvas2"));
   initCanvas("canvas0");
   initCanvas("canvas1");
+  initCanvas("canvas2");
   initMovementBar('movement0');
   initMovementBar('movement1');
+  initMovementBar('movement2');
   registerInputListeners();
   var i;
   for (i = 0; i < canvas_array.length; i++){

@@ -347,3 +347,13 @@ table.dataTable thead .sorting:after {
 textarea { 
     border-color: #eeeeee;
 }
+
+divsuper.editable {
+    font-size: 7px;
+    vertical-align: super;
+}
+
+divsub.editable {
+    font-size: 7px;
+    vertical-align: sub;
+}

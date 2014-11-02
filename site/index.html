@@ -72,9 +72,10 @@ canvas{
 	
 
 </head>
+<script src="../table.js"></script>
+<script src="../draggable.js"></script>
 <script id="doodleScript" src="doodle.js"></script>
-<script id="matrixScript" src="../table.js"></script>
-<script id="matrixScript" src="../draggable.js"></script>
+
 <body id="body">
 	<!--<div>
 				
@@ -421,7 +422,7 @@ canvas{
 			y.className = 'controls';y.id="movement"+doodleCount;
 			y.style.position="absolute";y.style.top=(body.scrollTop+600)+"px";y.style.left="500px";//y.style.z-index="2";
 			var z = document.createElement('button');
-			z.id = "delete"; z.onclick="delete(\'canvas"+doodleCount+"\')";z.innerHTML="X";
+			z.id = "delete"; z.onclick="deleter";z.innerHTML="X";
 			var w = document.createElement('div');
 			w.id="thingabc"+doodleCount;w.align="right";w.innerHTML="<<<";
 			document.getElementById("body").appendChild(x);
@@ -445,7 +446,7 @@ canvas{
             var cell = row.insertCell(0);
             cell.innerHTML = "<textarea cols='1' rows='1' style='resize: none' />";
             body.appendChild(table);
-			init();
+			//init();
 			matrixCount ++;
 		}
         // var updateMatrix(newMatrix){

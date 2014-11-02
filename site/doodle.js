@@ -38,12 +38,12 @@ var DrawingCommands = {LINE_TO:       "lineTo",
 var bar_array
  
  var body;
- 
+ var numDeleted = 0;
 //==============================================================================
 // TOUCH-DEVICE VARIABLES
 //==============================================================================
 var hasTouch = false;
- 
+
 //==============================================================================
 // INITIALIZATION
 //==============================================================================
@@ -53,20 +53,20 @@ window.onload = init;
 // Main initialization function
 function init () {
   body = document.getElementById("body");
-  var num = document.querySelectorAll(".doodle").length;
-  console.log("Test "+num);
+  var num = document.querySelectorAll(".doodle").length + numDeleted;
+  //console.log("Test "+document.querySelectorAll(".doodle").length+" + "+numDeleted+" = "+num);
   var i;
   canvas_array = new Array()
   context_array = new Array()
   bar_array = new Array()
   for(i=0;i<num;i++){
-	canvas_array.push(document.getElementById("canvas"+i));
+  canvas_array.push(document.getElementById("canvas"+i));
   }
   for(i=0;i<num;i++){
-	initCanvas("canvas"+i);
+  initCanvas("canvas"+i);
   }
   for(i=0;i<num;i++){
-	initMovementBar('movement'+i);
+  initMovementBar('movement'+i);
   }
   registerInputListeners();
   var i;
@@ -80,17 +80,19 @@ function init () {
 //set up movement bar
 function initMovementBar(movementBarId){
     var idNum = parseInt(movementBarId.slice(8));
-    var i;
-    for (i = 0; i < canvas_array.length; i++){
-        if (i === idNum){
-            bar_array[i] = document.getElementById(movementBarId);
-            bar_array[i].onmousedown = barDown;
-        }
+  if(document.getElementById("canvas"+idNum)==null){
+    return;
     }
+    bar_array[idNum] = document.getElementById(movementBarId);
+    bar_array[idNum].onmousedown = barDown;
 }
 
 // Set up the drawing canvas
 function initCanvas (canvasID) {
+  if(document.getElementById(canvasID)==null){
+  return;
+  }
+  console.log("initCanvas");
   // Retrieve canvas reference
   var idNum = parseInt(canvasID.slice(6));
        canvas_array[idNum] = document.getElementById(canvasID);
@@ -102,11 +104,11 @@ function initCanvas (canvasID) {
  
   // Size canvas
   if(canvas_array[idNum].width  == 0){
-	console.log("id: "+idNum);
-	canvas_array[idNum].width  = 600;
-	canvas_array[idNum].height = 400;
-	context_array.push(canvas_array[idNum].getContext('2d'));
-	//context_array[idNum].lineCap = "round";
+  console.log("id: "+idNum);
+  canvas_array[idNum].width  = 600;
+  canvas_array[idNum].height = 400;
+  context_array.push(canvas_array[idNum].getContext('2d'));
+  //context_array[idNum].lineCap = "round";
   }
   // Retrieve context reference, used to execute canvas drawing commands
  
@@ -117,7 +119,9 @@ function initCanvas (canvasID) {
 function registerInputListeners () {
   var i;
   for (i = 0; i < canvas_array.length; i++){
-    canvas_array[i].onmousedown = pointerDownListener;
+    if(canvas_array[i]!=null){
+      canvas_array[i].onmousedown = pointerDownListener;
+  }
   }
   document.ontouchstart = touchDownListener;
   document.ontouchmove = touchMoveListener;
@@ -194,12 +198,12 @@ function touchUpListener () {
 //==============================================================================
 function barDown(e){
     var idNum = parseInt(e.target.getAttribute('id').slice(8));
-	//console.log("barDown target is:");
+  //console.log("barDown target is:");
     //console.log(e.target);
     //console.log(idNum);
-    if (isNaN(idNum)){
-		return;
-	}
+    if (isNaN(idNum) || document.getElementById("canvas"+idNum)==null){
+    return;
+  }
     var i;
     var bar;
     for (i = 0; i < bar_array.length; i++){
@@ -207,12 +211,12 @@ function barDown(e){
             bar = bar_array[i];
         }
     }
-	//console.log("Bar:");
-	//console.log(bar);
+  //console.log("Bar:");
+  //console.log(bar);
     var rect = bar.getBoundingClientRect();
     //console.log(rect.right+"-20<"+e.clientX);
-	if(rect.right-30 < e.clientX){
-	    isCornerDown_array[idNum]=true;
+  if(rect.right-30 < e.clientX){
+      isCornerDown_array[idNum]=true;
     }
     isBarDown_array[idNum] = true;
     //console.log("Selected");
@@ -264,27 +268,29 @@ function pointerMoveListener (e) {
   var i;
   var idNum=-1;
   for(i = 0;i<isBarDown_array.length;i++){
-	if(isBarDown_array[i]){
-		idNum = i;
-	}
+  if(isBarDown_array[i]){
+    idNum = i;
+  }
   }
   if(idNum==-1){
-	for(i=0;i<canvas_array.length;i++){
-		//console.log(i + event + canvas_array[i]);
-		var mouseX2 = event.clientX - canvas_array[i].offsetLeft;
-		var mouseY2 = event.clientY - canvas_array[i].offsetTop + body.scrollTop;
-		if(mouseX2>0 && mouseX2<=canvas_array[i].width && mouseY2>0
-		&& mouseY2<canvas_array[i].height){
-			penMove(mouseX2, mouseY2,canvas_array[i].getContext('2d'));
-		}
-	}
+  for(i=0;i<canvas_array.length;i++){
+    if(canvas_array[i]!=null){
+    //console.log(i + event + canvas_array[i]);
+    var mouseX2 = event.clientX - canvas_array[i].offsetLeft;
+    var mouseY2 = event.clientY - canvas_array[i].offsetTop + body.scrollTop;
+    if(mouseX2>0 && mouseX2<=canvas_array[i].width && mouseY2>0
+    && mouseY2<canvas_array[i].height){
+      penMove(mouseX2, mouseY2,canvas_array[i].getContext('2d'));
+    }
+    }
+  }
     // Prevent default browser actions, such as text selection
     if (event.preventDefault) {
       event.preventDefault();
     } else {
       return false;  // IE
     }
-	return;
+  return;
   }
   isCornerDown = isCornerDown_array[idNum];
   isBarDown = isBarDown_array[idNum];
@@ -295,19 +301,19 @@ function pointerMoveListener (e) {
   var mouseY = event.clientY - canvas.offsetTop + body.scrollTop;
   //console.log(idNum+" "+isCornerDown+" "+isBarDown);
   if(isCornerDown){
-	var save = saveCanvas(canvas.getAttribute('id'));
+  var save = saveCanvas(canvas.getAttribute('id'));
     rect = canvas.getBoundingClientRect();
-	width = mouseX;
-	canvas.width = width<100?100:width;
-	bar.style.width = (width<100?100:width)+"px";
-	height = mouseY;
-	canvas.height = (height<50?50:height);
-	bar.style.top = (rect.top+(height<50?50:height))+"px";
-	loadImageToCanvas(canvas.getAttribute('id'),save);
+  width = mouseX;
+  canvas.width = width<100?100:width;
+  bar.style.width = (width<100?100:width)+"px";
+  height = mouseY;
+  canvas.height = (height<50?50:height);
+  bar.style.top = (rect.top+(height<50?50:height))+"px";
+  loadImageToCanvas(canvas.getAttribute('id'),save);
   }else if(isBarDown){
     bar.style.top = (e.clientY + body.scrollTop)+"px";
     bar.style.left = (e.clientX - canvas.width/2)+"px";
-	canvas.style.top = (e.clientY + body.scrollTop-canvas.height)+"px";
+  canvas.style.top = (e.clientY + body.scrollTop-canvas.height)+"px";
     canvas.style.left = (e.clientX - canvas.width/2)+"px";
     //bar.style.color = "blue";
   }
@@ -367,7 +373,7 @@ function penMove (x, y, context) {
     }
  
     // Draw the line locally.
-	//console.log("x "+localPen.x+", y "+localPen.y);
+  //console.log("x "+localPen.x+", y "+localPen.y);
     drawLine(localLineColor, localLineThickness, localPen.x, localPen.y, x, y,context);
  
     // Move the pen to the end of the line that was just drawn.
@@ -429,3 +435,19 @@ function getValidThickness (value) {
   var thickness = isNaN(value) ? defaultLineThickness : value;
   return Math.max(1, Math.min(thickness, maxLineThickness));
 }
+
+function deleter(){
+  numDeleted++;
+  var n = parseInt(document.activeElement.getAttribute('id').slice(3));
+  if(isNaN(n)){
+    return;
+  }
+  console.log("deleted "+n)
+  var can = document.getElementById("canvas"+n);
+  can.onmousedown = void1;
+  can.parentNode.removeChild(can);
+  document.getElementById("movement"+n).parentNode.removeChild(document.getElementById("movement"+n));
+  
+  
+}
+function void1(){}

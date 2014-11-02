@@ -7,7 +7,7 @@ var isBarDown_array = new Array()
 var isCornerDown_array = new Array()
  
 // Line defaults
-var defaultLineColor = "#AAAAAA";
+var defaultLineColor = "#000000";
 var defaultLineThickness = 1;
 var maxLineThickness = 30;
  
@@ -120,12 +120,12 @@ function registerInputListeners () {
   var i;
   for (i = 0; i < canvas_array.length; i++){
     canvas_array[i].onmousedown = pointerDownListener;
-    canvas_array[i].onmousemove = pointerMoveListener;
-    canvas_array[i].onmouseup = pointerUpListener;
-    canvas_array[i].ontouchstart = touchDownListener;
-    canvas_array[i].ontouchmove = touchMoveListener;
-    canvas_array[i].ontouchend = touchUpListener;
   }
+  document.ontouchstart = touchDownListener;
+  document.ontouchmove = touchMoveListener;
+  document.ontouchend = touchUpListener;
+  document.onmouseup = pointerUpListener;
+  document.onmousemove = pointerMoveListener;
   document.getElementById("thickness").onchange = thicknessSelectListener;
   document.getElementById("color").onchange = colorSelectListener;
 }
@@ -145,7 +145,6 @@ function loadImageToCanvas(canvasID,pngDataURL){
         ctx.drawImage(img,0,0)
     }
     img.src = pngDataURL;
-
 }
  
 //==============================================================================
@@ -199,9 +198,12 @@ function touchUpListener () {
 //==============================================================================
 function barDown(e){
     var idNum = parseInt(e.target.getAttribute('id').slice(8));
-    console.log("barDown target is:");
-    console.log(e.target);
-    console.log(idNum);
+	//console.log("barDown target is:");
+    //console.log(e.target);
+    //console.log(idNum);
+    if (isNaN(idNum)){
+		return;
+	}
     var i;
     var bar;
     for (i = 0; i < bar_array.length; i++){
@@ -209,20 +211,14 @@ function barDown(e){
             bar = bar_array[i];
         }
     }
+	//console.log("Bar:");
+	//console.log(bar);
     var rect = bar.getBoundingClientRect();
     //console.log(rect.right+"-20<"+e.clientX);
 	if(rect.right-30 < e.clientX){
-      for (i = 0; i < isCornerDown_array.length; i++){
-        if (i === idNum){
-	        isCornerDown_array[i]=true;
-        }
-      }
+	    isCornerDown_array[idNum]=true;
     }
-    for (i = 0; i < isBarDown_array.length; i++){
-        if (i === idNum){
-            isBarDown_array[i] = true;
-        }
-    }
+    isBarDown_array[idNum] = true;
     //console.log("Selected");
 }
 // Triggered when the mouse is pressed down
@@ -238,7 +234,7 @@ function pointerDownListener (e) {
   var event = e || window.event;
   // Determine where the user clicked the mouse.
   var canvas = event.target;
-  console.log(canvas);
+  //console.log(canvas);
   var mouseX = event.clientX - canvas.offsetLeft;
   var mouseY = event.clientY - canvas.offsetTop;
  
@@ -260,47 +256,60 @@ function pointerDownListener (e) {
  
 // Triggered when the mouse moves
 function pointerMoveListener (e) {
+
   if (hasTouch) {
     return;
   }
   var event = e || window.event; // IE uses window.event, not e
-  var canvas = e.target;
-  var mouseX = event.clientX - canvas.offsetLeft;
-  var mouseY = event.clientY - canvas.offsetTop;
+  
+  //console.log("e.clientX "+e.clientX+" e.clientY "+e.clientY);
+  
   var isCornerDown;
-  var idNum = parseInt(e.target.getAttribute('id').slice(6));
   var i;
-  for (i = 0; i < isCornerDown_array.length; i++){
-    if (i === idNum){
-      isCornerDown = isCornerDown_array[i];
-      isBarDown = isBarDown_array[i];
-      bar = bar_array[i];
-    }
+  var idNum=-1;
+  for(i = 0;i<isBarDown_array.length;i++){
+	if(isBarDown_array[i]){
+		idNum = i;
+	}
   }
-  if(isCornerDown){
-    rect = canvas.getBoundingClientRect();
-	width = e.clientX - rect.left;
-	canvas.width = width<100?100:width;
-	bar.style.width = (width<100?100:width)+"px";
-	height = e.clientY - rect.top;
-	canvas.height = height<50?50:height;
-  }else if(isBarDown){
-    bar.style.top = (e.clientY+body.scrollTop-canvas.height)+"px";
-    bar.style.left = (e.clientX - canvas.width/2)+"px";
-	canvas.style.top = (e.clientY+body.scrollTop-canvas.height)+"px";
-    canvas.style.left = (e.clientX - canvas.width/2)+"px";
-    //bar.style.color = "blue";
-    //console.log("Moved "+body.scrollTop);
-  }else{
-    // Draw a line if the pen is down
-    penMove(mouseX, mouseY,canvas.getContext('2d'));
- 
+  if(idNum==-1){
+	for(i=0;i<canvas_array.length;i++){
+		var mouseX2 = event.clientX - canvas_array[i].offsetLeft;
+		var mouseY2 = event.clientY - canvas_array[i].offsetTop;
+		if(mouseX2>0 && mouseX2<=canvas_array[i].width && mouseY2>0
+		&& mouseY2<canvas_array[i].height){
+			penMove(mouseX2, mouseY2,canvas_array[i].getContext('2d'));
+		}
+	}
     // Prevent default browser actions, such as text selection
     if (event.preventDefault) {
       event.preventDefault();
     } else {
       return false;  // IE
     }
+	return;
+  }
+  isCornerDown = isCornerDown_array[idNum];
+  isBarDown = isBarDown_array[idNum];
+  bar = bar_array[idNum];
+  var canvas = canvas_array[idNum];
+  
+  var mouseX = event.clientX - canvas.offsetLeft;
+  var mouseY = event.clientY - canvas.offsetTop;
+  console.log(idNum+" "+isCornerDown+" "+isBarDown);
+  if(isCornerDown){
+    rect = canvas.getBoundingClientRect();
+	width = mouseX;
+	canvas.width = width<100?100:width;
+	bar.style.width = (width<100?100:width)+"px";
+	height = mouseY;
+	canvas.height = height<50?50:height;
+  }else if(isBarDown){
+    bar.style.top = (e.clientY + body.scrollTop-canvas.height)+"px";
+    bar.style.left = (e.clientX - canvas.width/2)+"px";
+	canvas.style.top = (e.clientY + body.scrollTop-canvas.height)+"px";
+    canvas.style.left = (e.clientX - canvas.width/2)+"px";
+    bar.style.color = "blue";
   }
 }
  
@@ -348,7 +357,7 @@ function penDown (x, y) {
 }
  
 // Draws a line if the pen is down.
-function penMove (x, y,context) {
+function penMove (x, y, context) {
   if (isPenDown) {
     // Buffer the new position for broadcast to other users. Buffer a maximum
     // of 100 points per second.
@@ -358,6 +367,7 @@ function penMove (x, y,context) {
     }
  
     // Draw the line locally.
+	console.log("x "+localPen.x+", y "+localPen.y);
     drawLine(localLineColor, localLineThickness, localPen.x, localPen.y, x, y,context);
  
     // Move the pen to the end of the line that was just drawn.

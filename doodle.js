@@ -4,6 +4,7 @@
 // A flag to track whether the user is drawing or not
 var isPenDown = false;
 var isBarDown = false;
+var isCornerDown = false;
  
 // Line defaults
 var defaultLineColor = "#AAAAAA";
@@ -166,6 +167,10 @@ function touchUpListener () {
 // MOUSE-INPUT EVENT LISTENERS
 //==============================================================================
 function barDown(e){
+    var rect = bar.getBoundingClientRect();
+    //console.log(rect.right+"-20<"+e.clientX);
+	if(rect.right-30 < e.clientX)
+	  isCornerDown=true;
     isBarDown = true;
     //console.log("Selected");
 }
@@ -205,18 +210,24 @@ function pointerMoveListener (e) {
   if (hasTouch) {
     return;
   }
-  if(isBarDown){
-    bar.style.top = (e.clientY+body.scrollTop)+"px";
+  var event = e || window.event; // IE uses window.event, not e
+  var mouseX = event.clientX - canvas.offsetLeft;
+  var mouseY = event.clientY - canvas.offsetTop;
+  if(isCornerDown){
+    rect = canvas.getBoundingClientRect();
+	width = e.clientX - rect.left;
+	canvas.width = width<100?100:width;
+	bar.style.width = (width<100?100:width)+"px";
+	height = e.clientY - rect.top;
+	canvas.height = height<50?50:height;
+  }else if(isBarDown){
+    bar.style.top = (e.clientY+body.scrollTop-canvas.height)+"px";
     bar.style.left = (e.clientX - canvas.width/2)+"px";
-	canvas.style.top = (e.clientY+body.scrollTop)+"px";
+	canvas.style.top = (e.clientY+body.scrollTop-canvas.height)+"px";
     canvas.style.left = (e.clientX - canvas.width/2)+"px";
     //bar.style.color = "blue";
-    console.log("Moved "+body.scrollTop);
+    //console.log("Moved "+body.scrollTop);
   }else{
-    var event = e || window.event; // IE uses window.event, not e
-    var mouseX = event.clientX - canvas.offsetLeft;
-    var mouseY = event.clientY - canvas.offsetTop;
- 
     // Draw a line if the pen is down
     penMove(mouseX, mouseY);
  
@@ -296,6 +307,7 @@ function penMove (x, y) {
 function penUp () {
   isPenDown = false;
   isBarDown = false;
+  isCornerDown= false;
 }
  
 //==============================================================================

@@ -73,8 +73,11 @@ See: http://code.google.com/p/explorercanvas/
 </head>
  
 <body id="body">
-  <!--Drop down menus for selecting line thickness and color-->
+  <canvas id="canvas" style="position:relative"></canvas>
+  
   <div id="controls" style="position:relative">
+    <button id="delete" onclick="delete('canvas')">X</button>
+	<button id="dup" onclick="delete('canvas')">DUP</button>
     Size:
     <select id="thickness" class="fixed">
       <option value="1">1</option>
@@ -98,10 +101,8 @@ See: http://code.google.com/p/explorercanvas/
     </select>
     <button id="saveCan" onclick="saveCanvas('canvas');">Save</button>
     <button id="loadImg" onclick="loadImageToCanvas('canvas',saveCanvas('canvas'));">Load</button>
-  </div>
- 
-  <!--The canvas where drawings will be displayed-->
-  <canvas id="canvas" style="position:relative"></canvas>
+    <div style="heihgt:30px;width:30px;background-color:#FFFFFF"/>
+ </div>
  
   <!--A status text field, for displaying connection information-->
   <div id="status"></div>

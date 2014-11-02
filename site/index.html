@@ -77,15 +77,7 @@ canvas{
 <script id="doodleScript" src="doodle.js"></script>
 
 <body id="body">
-	<!--<div>
-				
-				<canvas id="canvas0" class="doodle" style="position:absolute;top:0;left:0;z-index:1" ></canvas>
-				<div class="controls" id="movement0" style="position:absolute;top:400px;left:0;z-index:1">
-				<button id="delete" onclick="delete(\'canvas0\')">X</button>
-				<div id="thingabc0" align="right"><<<</div></div>
-				</div>-->
     <div id="wrapper">
-
         <!-- Navigation -->
         <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
             <div class="navbar-header">
@@ -147,16 +139,16 @@ canvas{
                                     <a onClick="addMatrix();"> Add a Matrix</a>
                                 </li>
                                 <li>
-                                <button class="btn btn-default" value="Add a row" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="addRow(curMatrix)" >Add a row</button>
+                                <a><button class="btn btn-primary" value="Add a row" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="addRow(curMatrix)" > Add a row</button></a>
                                 </li>
                                 <li>
-                                <button class="btn btn-default" value="Add a column" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="addColumn(curMatrix)" >Add a column</button>
+                                <a><button class="btn btn-primary" value="Add a column" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="addColumn(curMatrix)" > Add a column</button></a>
                                 </li>
                                 <li>
-                                <button class="btn btn-default" value="Remove a row" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="deleteRow(curMatrix)" >Remove a row</button>
+                                <a><button class="btn btn-primary" value="Remove a row" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="deleteRow(curMatrix)" > Remove a row</button></a>
                                 </li>
                                 <li>
-                                <button class="btn btn-default" value="Remove a column" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="deleteColumn(curMatrix)" >Delete a column</button>
+                                <a><button class="btn btn-primary" value="Remove a column" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="deleteColumn(curMatrix)" > Delete a column</button></a>
                                 </li>
                             </ul>
                         </li>
@@ -190,42 +182,6 @@ canvas{
                                 <li>
                                     <a href="#"><i class="fa fa-sitemap fa-fw"></i> Add an Element<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
-                                        
-                                        
-                                        <!--
-                                         OLD CODE FOR SUPERSCRIPT INPUT AND SUBSCRIPT INPUT
-                                        <li>
-                                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Superscript<span class="fa arrow"></span></a>
-                                            <ul class="nav nav-third-level">
-                                                <li class="sidebar-search">
-                                                    <div class="input-group custom-search-form">
-                                                        <input type="text" class="form-control" id="addSuper" placeholder="Field#">
-                                                            <span class="input-group-btn">
-                                                                <button id="sup1" class="btn btn-default" onclick="superS()" type="button">
-                                                                    Add
-                                                                </button>
-                                                            </span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        <li>
-                                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Subscript<span class="fa arrow"></span></a>
-                                            <ul class="nav nav-third-level">
-                                                <li class="sidebar-search">
-                                                    <div class="input-group custom-search-form">
-                                                        <input type="text" class="form-control" id="addSub" placeholder="Field#">
-                                                            <span class="input-group-btn">
-                                                                <button id="sub1" class="btn btn-default" onclick="subS()" type="button">
-                                                                    Add
-                                                                </button>
-                                                            </span>
-                                                    </div>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                        -->
-                                         
                                         <li>
                                             <a>
                                                 <div class="btn-group" data-toggle="buttons">
@@ -240,9 +196,7 @@ canvas{
                                                             SubS
                                                             </label>
                                                 </div>
-
                                             </a>
-                                            
                                             <li class="sidebar-search">
                                                 <div class="input-group custom-search-form">
                                                     <input type="text" class="form-control" id="inputForm" placeholder="Field#">
@@ -262,16 +216,6 @@ canvas{
                         <li>
                             <a href="#"><i class="fa fa-sitemap fa-fw"></i> Special Characters<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
-                                <li class="sidebar-search">
-                                    <div class="input-group custom-search-form">
-                                        <input type="text" class="form-control" placeholder="Search...">
-                                            <span class="input-group-btn">
-                                                <button class="btn btn-default" type="button">
-                                                    <i class="fa fa-search"></i>
-                                                </button>
-                                            </span>
-                                    </div>
-                                </li>
                                 <li>
                                     <a>Greek Letters (Upper Case)
                                     </a> <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&#913;&nbsp;&nbsp;&#914;&nbsp;&nbsp;&#915;&nbsp;&nbsp;&#916;&nbsp;&nbsp;&#917;&nbsp;&nbsp;&#918;&nbsp;&nbsp;&#919;&nbsp;&nbsp;&#920;&nbsp;&nbsp;&#921;&nbsp;&nbsp;&#922;&nbsp;&nbsp;&#923;&nbsp;&nbsp;</p>
@@ -314,8 +258,6 @@ canvas{
                     
                 </div>
                 <div class="col-lg-12" id="area-adder">
-                    <!--textarea rows="20" cols="158" name="textarea0"></textarea-->
-                    <!--div class="editable">Input...</div-->
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -355,37 +297,6 @@ canvas{
             else
                 which.style.display="block";
         }
-        //old superscript and subscript
-        //function changeInput() {
-            /*var field = parseInt(document.getElementById('addSuper').value.substr(document.getElementById('addSuper').value.length - 1));
-            var checker = "textarea" + field;
-            var whichOne = document.getElementById(checker);
-            whichOne.value += document.getElementById('addSuper').value.substr(0, document.getElementById('addSuper').value.length - 3).sup();
-             */
-            //var text =
-            /*$('#sup1').click(function(){
-                                 var field = parseInt(document.getElementById('addSuper').value.substr(document.getElementById('addSuper').value.length - 1));
-                                 var checker = "textarea" + field;
-                               var text = $('#' + checker).html();
-                               $('#' + checker).html(text + document.getElementById('addSuper').value.substr(0, document.getElementById('addSuper').value.length - 3).sup());
-                               });*/
-            /*$('#cin1').click(function(){
-                             var field = document.getElementById('inputForm').value
-                             var checker = "textarea" + field;
-                             //var noWidth = &#8203 "";
-                             var noWidth = "";
-                             var text = $('#' + checker).html();
-                             if (document.getElementById('#option2').checked) {
-                             $('#' + checker).html(text + noWidth.sup());
-                             }
-                             else if (document.getElementById('#option3').checked) {
-                             $('#' + checker).html(text + noWidth.sub());
-                             }
-                             else if (document.getElementById('#option1').checked) {
-                             $('#' + checker).html(text);
-                             };}
-
-        }*/
         function changeInput() {
             var field = document.getElementById('inputForm').value
             var checker = "textarea" + field;
@@ -450,11 +361,7 @@ canvas{
 			//init();
 			matrixCount ++;
 		}
-        // var updateMatrix(newMatrix){
-        //    curMatrix = newMatrix; 
-        // }
     </script>
-
 </body>
 
 </html>

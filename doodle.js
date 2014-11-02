@@ -26,9 +26,9 @@ var lastBufferTime = new Date().getTime();
 // DRAWING VARIABLES
 //==============================================================================
 // The HTML5 drawing canvas
-var canvas;
 // The drawing canvas's context, through which drawing commands are performed
-var context;
+var canvas_array = new Array()
+var context_array = new Array()
 // A hash of drawing commands executed by UnionDraw's rendering process
 var DrawingCommands = {LINE_TO:       "lineTo",
                        MOVE_TO:       "moveTo",
@@ -52,36 +52,51 @@ window.onload = init;
 // Main initialization function
 function init () {
   body = document.getElementById("body");
-  initCanvas("canvas");
-  initMovementBar();
+  var canvas0, canvas1;
+  canvas_array.push(document.getElementById("canvas0"));
+  canvas_array.push(document.getElementById("canvas1"));
+  initCanvas("canvas0");
+  initMovementBar('movement0');
+  initCanvas("canvas1");
+  initMovementBar('movement1');
   registerInputListeners();
   iPhoneToTop();
   console.log("Test");
 }
  
 //set up movement bar
-function initMovementBar(){
-    bar = document.getElementById("controls");
+function initMovementBar(movementBarId){
+    bar = document.getElementById(movementBarId);
     bar.onmousedown = barDown;
 }
 
 // Set up the drawing canvas
 function initCanvas (canvasID) {
   // Retrieve canvas reference
-  canvas = document.getElementById(canvasID);
- 
-  // If IE8, do IE-specific canvas initialization (required by excanvas.js)
-  if (typeof G_vmlCanvasManager != "undefined") {
-    this.canvas = G_vmlCanvasManager.initElement(this.canvas);
+  var idNum = parseInt(canvasID.slice(6));
+  var i;
+  for (i = 0; i < canvas_array.length; i++){
+    if (i === idNum){
+        canvas_array[i] = document.getElementById(canvasID);
+        // If IE8, do IE-specific canvas initialization (required by excanvas.js)
+        if (typeof G_vmlCanvasManager != "undefined") {
+            canvas_array[i] = G_vmlCanvasManager.initElement(canvas_array[i]);
+        }
+    }
+
   }
  
-  // Size canvas
-  canvas.width  = 600;
-  canvas.height = 400;
  
+  for (i = 0; i < canvas_array.length; i++){
+    if (i === idNum){
+      // Size canvas
+      canvas_array[i].width  = 600;
+      canvas_array[i].height = 400;
+      context_array.push(canvas_array[i].getContext('2d'));
+      context_array[i].lineCap = "round";
+    }
+  }
   // Retrieve context reference, used to execute canvas drawing commands
-  context = canvas.getContext('2d');
-  context.lineCap = "round";
  
   // Set control panel defaults
   document.getElementById("thickness").selectedIndex = 0;
@@ -90,12 +105,15 @@ function initCanvas (canvasID) {
  
 // Register callback functions to handle user input
 function registerInputListeners () {
-  canvas.onmousedown = pointerDownListener;
-  document.onmousemove = pointerMoveListener;
-  document.onmouseup = pointerUpListener;
-  document.ontouchstart = touchDownListener;
-  document.ontouchmove = touchMoveListener;
-  document.ontouchend = touchUpListener;
+  var i;
+  for (i = 0; i < canvas_array.length; i++){
+    canvas_array[i].onmousedown = pointerDownListener;
+    canvas_array[i].onmousemove = pointerMoveListener;
+    canvas_array[i].onmouseup = pointerUpListener;
+    canvas_array[i].ontouchstart = touchDownListener;
+    canvas_array[i].ontouchmove = touchMoveListener;
+    canvas_array[i].ontouchend = touchUpListener;
+  }
   document.getElementById("thickness").onchange = thicknessSelectListener;
   document.getElementById("color").onchange = colorSelectListener;
 }
@@ -133,6 +151,7 @@ function touchDownListener (e) {
   if (event.target.nodeName != "SELECT") {
     e.preventDefault();
   }
+  var canvas = event.target;
   // Determine where the user touched screen.
   var touchX = e.changedTouches[0].clientX - canvas.offsetLeft;
   var touchY = e.changedTouches[0].clientY - canvas.offsetTop;
@@ -149,10 +168,11 @@ function touchDownListener (e) {
 function touchMoveListener (e) {
   hasTouch = true;
   e.preventDefault();
+  var canvas = e.target;
   var touchX = e.changedTouches[0].clientX - canvas.offsetLeft;
   var touchY = e.changedTouches[0].clientY - canvas.offsetTop;
   // Draw a line to the position being touched.
-  penMove(touchX, touchY);
+  penMove(touchX, touchY,canvas.getContext('2d'));
 }
  
 // On devices that support touch input, this function is triggered when the
@@ -181,6 +201,8 @@ function pointerDownListener (e) {
   // Internet Explorer uses window.event; other browsers use the event parameter
   var event = e || window.event;
   // Determine where the user clicked the mouse.
+  var canvas = event.target;
+  console.log(canvas);
   var mouseX = event.clientX - canvas.offsetLeft;
   var mouseY = event.clientY - canvas.offsetTop;
  
@@ -206,6 +228,7 @@ function pointerMoveListener (e) {
     return;
   }
   if(isBarDown){
+    var canvas  = e.target;
     bar.style.top = (e.clientY+body.scrollTop)+"px";
     bar.style.left = (e.clientX - canvas.width/2)+"px";
 	canvas.style.top = (e.clientY+body.scrollTop)+"px";
@@ -214,11 +237,12 @@ function pointerMoveListener (e) {
     console.log("Moved "+body.scrollTop);
   }else{
     var event = e || window.event; // IE uses window.event, not e
+    var canvas = event.target;
     var mouseX = event.clientX - canvas.offsetLeft;
     var mouseY = event.clientY - canvas.offsetTop;
  
     // Draw a line if the pen is down
-    penMove(mouseX, mouseY);
+    penMove(mouseX, mouseY,canvas.getContext('2d'));
  
     // Prevent default browser actions, such as text selection
     if (event.preventDefault) {
@@ -273,7 +297,7 @@ function penDown (x, y) {
 }
  
 // Draws a line if the pen is down.
-function penMove (x, y) {
+function penMove (x, y,context) {
   if (isPenDown) {
     // Buffer the new position for broadcast to other users. Buffer a maximum
     // of 100 points per second.
@@ -283,7 +307,7 @@ function penMove (x, y) {
     }
  
     // Draw the line locally.
-    drawLine(localLineColor, localLineThickness, localPen.x, localPen.y, x, y);
+    drawLine(localLineColor, localLineThickness, localPen.x, localPen.y, x, y,context);
  
     // Move the pen to the end of the line that was just drawn.
     localPen.x = x;
@@ -302,7 +326,7 @@ function penUp () {
 // DRAWING
 //==============================================================================
 // Draws a line on the HTML5 canvas
-function drawLine (color, thickness, x1, y1, x2, y2) {
+function drawLine (color, thickness, x1, y1, x2, y2,context) {
   context.strokeStyle = color;
   context.lineWidth   = thickness;
  

@@ -12,25 +12,43 @@
 }
 </style>
 
-<div id="dragMe">
-    <table style="width:100%">
-        <tr>
-            <td><input id="entry" type="text" /></td>
-            <td><input id="entry" type="text" /></td> 
-            <td><input id="entry" type="text" /></td> 
-        </tr>
-        <tr>
-            <td><input id="entry" type="text" /></td>
-            <td><input id="entry" type="text" /></td> 
-            <td><input id="entry" type="text" /></td> 
-        </tr>
+<!-- <div id="dragMe"> -->
+<!--     <table style="width:100%"> -->
+<!--         <tr> -->
+<!--             <td><input id="entry" type="text" /></td> -->
+<!--             <td><input id="entry" type="text" /></td>  -->
+<!--             <td><input id="entry" type="text" /></td>  -->
+<!--         </tr> -->
+<!--         <tr> -->
+<!--             <td><input id="entry" type="text" /></td> -->
+<!--             <td><input id="entry" type="text" /></td>  -->
+<!--             <td><input id="entry" type="text" /></td>  -->
+<!--         </tr> -->
+<!--     </table> -->
+<!-- </div> -->
+<!--  -->
+    <script src="table.js"></script>
+    <input type="button" value="addCol" onclick="addColumn('tblSample');" />
+    <input type="button" value="addRow" onclick="addRow('tblSample');" />
+    <input type="button" value="delCol" onclick="deleteColumn('tblSample');" />
+    <input type="button" value="delRow" onclick="deleteRow('tblSample');" />
+
+    <table border="0" id="tblSample">
+    <thead>
+    <tr>
+        <th><textarea cols='1' rows='1' style="resize: none"></textarea></th>
+    </tr>
+    </thead>
+    <tbody>
+    </tbody>
     </table>
-</div>
 
 <script src="draggable.js"></script>
 <script>
-    var matrix = document.getElementById('dragMe');
+    var matrix = document.getElementById('tblSample');
     draggable(matrix);
+    // var matrix = document.getElementById('dragFrame');
+    // draggable(matrix);
     var setInfo = function(type) { return function(event) {
       console.log(event.x+", "+event.y);
     }};

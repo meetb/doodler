@@ -36,6 +36,7 @@ var DrawingCommands = {LINE_TO:       "lineTo",
                        SET_COLOR:     "setColor"};
  
  var bar;
+ var body;
  
 //==============================================================================
 // TOUCH-DEVICE VARIABLES
@@ -50,6 +51,7 @@ window.onload = init;
  
 // Main initialization function
 function init () {
+  body = document.getElementById("body");
   initCanvas("canvas");
   initMovementBar();
   registerInputListeners();
@@ -204,12 +206,12 @@ function pointerMoveListener (e) {
     return;
   }
   if(isBarDown){
-    bar.style.top = e.clientY+"px";
+    bar.style.top = (e.clientY+body.scrollTop)+"px";
     bar.style.left = (e.clientX - canvas.width/2)+"px";
-	canvas.style.top = (e.clientY+30)+"px";
+	canvas.style.top = (e.clientY+body.scrollTop)+"px";
     canvas.style.left = (e.clientX - canvas.width/2)+"px";
     //bar.style.color = "blue";
-    //console.log("Moved "+e.clientX+", "+e.clientY);
+    console.log("Moved "+body.scrollTop);
   }else{
     var event = e || window.event; // IE uses window.event, not e
     var mouseX = event.clientX - canvas.offsetLeft;
@@ -245,26 +247,7 @@ function thicknessSelectListener (e) {
   var newThickness = this.options[this.selectedIndex].value;
   // Locally, set the line thickness to the selected value
   localLineThickness = getValidThickness(newThickness);
-  // Share the selected thickness with other users by setting the client
-  // attribute named "thickness". Attributes are automatically shared with other
-  // clients in the room, triggering clientAttributeUpdateListener().
-  // Arguments for SET_CLIENT_ATTR are:
-  //   clientID
-  //   userID (None in this case)
-  //   attrName
-  //   escapedAttrValue
-  //   attrScope (The room)
-  //   attrOptions (An integer whose bits specify options. "4" means
-  //                the attribute should be shared).
-  // msgManager.sendUPC(UPC.SET_CLIENT_ATTR,
-  //                    orbiter.getClientID(),
-  //                    "",
-  //                    Attributes.THICKNESS,
-  //                    newThickness,
-  //                    roomID,
-  //                    "4");
-  // After the user selects a value in the drop-down menu, the iPhone
-  // automatically scrolls the page, so scroll back to the top-left.
+
   iPhoneToTop();
 }
  
@@ -274,15 +257,6 @@ function colorSelectListener (e) {
   var newColor = this.options[this.selectedIndex].value;
   // Locally, set the line color to the selected value
   localLineColor = newColor;
-  // Share selected color with other users
-  // msgManager.sendUPC(UPC.SET_CLIENT_ATTR,
-  //                    orbiter.getClientID(),
-  //                    "",
-  //                    Attributes.COLOR,
-  //                    newColor,
-  //                    roomID,
-  //                    "4");
- 
   // Scroll the iPhone back to the top-left.
   iPhoneToTop();
 }

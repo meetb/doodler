@@ -72,9 +72,9 @@ See: http://code.google.com/p/explorercanvas/
  
 </head>
  
-<body>
+<body id="body">
   <!--Drop down menus for selecting line thickness and color-->
-  <div id="controls" style="position:absolute">
+  <div id="controls" style="position:relative">
     Size:
     <select id="thickness" class="fixed">
       <option value="1">1</option>
@@ -101,7 +101,7 @@ See: http://code.google.com/p/explorercanvas/
   </div>
  
   <!--The canvas where drawings will be displayed-->
-  <canvas id="canvas" style="position:absolute"></canvas>
+  <canvas id="canvas" style="position:relative"></canvas>
  
   <!--A status text field, for displaying connection information-->
   <div id="status"></div>

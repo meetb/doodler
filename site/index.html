@@ -153,9 +153,9 @@ canvas{
                                     <ul class="nav nav-third-level">
                                         <li class="sidebar-search">
                                             <div class="input-group custom-search-form">
-                                                <input type="text" class="form-control" id="searchIn" placeholder="Search...">
+                                                <input type="text" class="form-control" id="searchIn" placeholder="Enter...">
                                                     <span class="input-group-btn">
-                                                        <button class="btn btn-default" onclick="deleteText()" type="button">
+                                                        <button class="btn btn-default" onclick="hideshow()" type="button">
                                                             Del
                                                         </button>
                                                     </span>
@@ -167,10 +167,35 @@ canvas{
                                     <a href="#"><i class="fa fa-sitemap fa-fw"></i> Add an Element<span class="fa arrow"></span></a>
                                     <ul class="nav nav-third-level">
                                         <li>
-                                            <a> Superscript</a>
+                                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Superscript<span class="fa arrow"></span></a>
+                                            <ul class="nav nav-third-level">
+                                                <li class="sidebar-search">
+                                                    <div class="input-group custom-search-form">
+                                                        <input type="text" class="form-control" id="addSuper" placeholder="Input, Field#">
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-default" onclick="superS()" type="button">
+                                                                    Add
+                                                                </button>
+                                                            </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
                                         </li>
                                         <li>
-                                            <a> Subscript</a>
+                                            <a href="#"><i class="fa fa-sitemap fa-fw"></i> Subscript<span class="fa arrow"></span></a>
+                                            <ul class="nav nav-third-level">
+                                                <li class="sidebar-search">
+                                                    <div class="input-group custom-search-form">
+                                                        <input type="text" class="form-control" id="addSub" placeholder="Input, Field#">
+                                                            <span class="input-group-btn">
+                                                                <button class="btn btn-default" onclick="subS()" type="button">
+                                                                    Add
+                                                                </button>
+                                                            </span>
+                                                    </div>
+                                                </li>
+                                            </ul>
+
                                         </li>
                                         <li>
                                             <a> Matrix</a>
@@ -218,7 +243,7 @@ canvas{
                     <h4 class="page-header">Start Here</h4>
                 </div>
                 <div class="col-lg-12" id="area-adder">
-                    <textarea rows="20" cols="158" name="textarea0"></textarea>
+                    <!--textarea rows="20" cols="158" name="textarea0"></textarea-->
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -243,21 +268,41 @@ canvas{
     
     <script>
         var count = 0;
-        function deleteText() {
+        $('.editable').each(function(){
+                            this.contentEditable = true;
+                            });
+        function hideshow(){
             var checker = "textarea" + document.getElementById('searchIn').value;
-            alert(checker);
-            var element = document.getElementByName(checker);
-            /*var parent = document.getElementById('area-adder');
-            $("#area-adder").removeChild(child);*/
-            element.parentNode.removeChild(element);
+            var which = document.getElementById(checker);
+            
+            if (!document.getElementById)
+            return;
+            if (which.style.display=="block")
+                which.style.display="none";
+            else
+                which.style.display="block";
+        }
+        function superS() {
+            var field = parseInt(document.getElementById('addSuper').value.substr(document.getElementById('addSuper').value.length - 1));
+            var checker = "textarea" + field;
+            var whichOne = document.getElementById(checker);
+            whichOne.value += document.getElementById('addSuper').value.substr(0, document.getElementById('addSuper').value.length - 3).sup();
+
+        }
+        function subS() {
+            var field = parseInt(document.getElementById('addSub').value.substr(document.getElementById('addSub').value.length - 1));
+            var checker = "textarea" + field;
+            var whichOne = document.getElementById(checker);
+            var script = "" + document.getElementById('addSub').value.substr(0, document.getElementById('addSub').value.length - 3);
+            whichOne.value += script.sub();
         }
         function myFunction() {
             count += 1;
             var x = document.createElement("textarea");
             x.cols = "158";
             x.rows = "20";
-            x.name = "textarea" + count;
-            alert("textarea" + count);
+            x.id = "textarea" + count;
+            x.style.display = "block";
             var t = document.createTextNode("This is textarea number: " + count);
             x.appendChild(t);
             $("#area-adder").append(x);

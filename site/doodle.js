@@ -28,14 +28,14 @@ var lastBufferTime = new Date().getTime();
 //==============================================================================
 // The HTML5 drawing canvas
 // The drawing canvas's context, through which drawing commands are performed
-var canvas_array = new Array()
-var context_array = new Array()
+var canvas_array
+var context_array
 // A hash of drawing commands executed by UnionDraw's rendering process
 var DrawingCommands = {LINE_TO:       "lineTo",
                        MOVE_TO:       "moveTo",
                        SET_THICKNESS: "setThickness",
                        SET_COLOR:     "setColor"};
-var bar_array = new Array()
+var bar_array
  
  var body;
  
@@ -53,16 +53,21 @@ window.onload = init;
 // Main initialization function
 function init () {
   body = document.getElementById("body");
-  var canvas0, canvas1;
-  canvas_array.push(document.getElementById("canvas0"));
-  canvas_array.push(document.getElementById("canvas1"));
-  canvas_array.push(document.getElementById("canvas2"));
-  initCanvas("canvas0");
-  initCanvas("canvas1");
-  initCanvas("canvas2");
-  initMovementBar('movement0');
-  initMovementBar('movement1');
-  initMovementBar('movement2');
+  var num = document.querySelectorAll(".doodle").length;
+  console.log("Test "+num);
+  var i;
+  canvas_array = new Array()
+  context_array = new Array()
+  bar_array = new Array()
+  for(i=0;i<num;i++){
+	canvas_array.push(document.getElementById("canvas"+i));
+  }
+  for(i=0;i<num;i++){
+	initCanvas("canvas"+i);
+  }
+  for(i=0;i<num;i++){
+	initMovementBar('movement'+i);
+  }
   registerInputListeners();
   var i;
   for (i = 0; i < canvas_array.length; i++){
@@ -70,7 +75,6 @@ function init () {
     isCornerDown_array[i] = false;
   }
   iPhoneToTop();
-  console.log("Test");
 }
  
 //set up movement bar
@@ -89,33 +93,24 @@ function initMovementBar(movementBarId){
 function initCanvas (canvasID) {
   // Retrieve canvas reference
   var idNum = parseInt(canvasID.slice(6));
-  var i;
-  for (i = 0; i < canvas_array.length; i++){
-    if (i === idNum){
-        canvas_array[i] = document.getElementById(canvasID);
-        // If IE8, do IE-specific canvas initialization (required by excanvas.js)
-        if (typeof G_vmlCanvasManager != "undefined") {
-            canvas_array[i] = G_vmlCanvasManager.initElement(canvas_array[i]);
-        }
-    }
-
-  }
+       canvas_array[idNum] = document.getElementById(canvasID);
+       // If IE8, do IE-specific canvas initialization (required by excanvas.js)
+   if (typeof G_vmlCanvasManager != "undefined") {
+      canvas_array[idNum] = G_vmlCanvasManager.initElement(canvas_array[idNum]);
+   }
  
  
-  for (i = 0; i < canvas_array.length; i++){
-    if (i === idNum){
-      // Size canvas
-      canvas_array[i].width  = 600;
-      canvas_array[i].height = 400;
-      context_array.push(canvas_array[i].getContext('2d'));
-      context_array[i].lineCap = "round";
-    }
+  // Size canvas
+  if(canvas_array[idNum].width  == 0){
+	console.log("id: "+idNum);
+	canvas_array[idNum].width  = 600;
+	canvas_array[idNum].height = 400;
+	context_array.push(canvas_array[idNum].getContext('2d'));
+	//context_array[idNum].lineCap = "round";
   }
   // Retrieve context reference, used to execute canvas drawing commands
  
   // Set control panel defaults
-  document.getElementById("thickness").selectedIndex = 0;
-  document.getElementById("color").selectedIndex = 1;
 }
  
 // Register callback functions to handle user input
@@ -129,8 +124,6 @@ function registerInputListeners () {
   document.ontouchend = touchUpListener;
   document.onmouseup = pointerUpListener;
   document.onmousemove = pointerMoveListener;
-  document.getElementById("thickness").onchange = thicknessSelectListener;
-  document.getElementById("color").onchange = colorSelectListener;
 }
 
 function saveCanvas (canvasID){
@@ -277,7 +270,8 @@ function pointerMoveListener (e) {
   }
   if(idNum==-1){
 	for(i=0;i<canvas_array.length;i++){
-		var mouseX2 = event.clientX - canvas_array[i].offsetLeft + body.scrollLeft;
+		//console.log(i + event + canvas_array[i]);
+		var mouseX2 = event.clientX - canvas_array[i].offsetLeft;
 		var mouseY2 = event.clientY - canvas_array[i].offsetTop + body.scrollTop;
 		if(mouseX2>0 && mouseX2<=canvas_array[i].width && mouseY2>0
 		&& mouseY2<canvas_array[i].height){
@@ -299,7 +293,7 @@ function pointerMoveListener (e) {
   
   var mouseX = event.clientX - canvas.offsetLeft + body.scrollLeft;
   var mouseY = event.clientY - canvas.offsetTop + body.scrollTop;
-  console.log(idNum+" "+isCornerDown+" "+isBarDown);
+  //console.log(idNum+" "+isCornerDown+" "+isBarDown);
   if(isCornerDown){
 	var save = saveCanvas(canvas.getAttribute('id'));
     rect = canvas.getBoundingClientRect();
@@ -373,7 +367,7 @@ function penMove (x, y, context) {
     }
  
     // Draw the line locally.
-	console.log("x "+localPen.x+", y "+localPen.y);
+	//console.log("x "+localPen.x+", y "+localPen.y);
     drawLine(localLineColor, localLineThickness, localPen.x, localPen.y, x, y,context);
  
     // Move the pen to the end of the line that was just drawn.

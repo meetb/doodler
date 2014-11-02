@@ -153,7 +153,7 @@ function touchUpListener () {
 //==============================================================================
 function barDown(e){
     isBarDown = true;
-    console.log("Selected");
+    //console.log("Selected");
 }
 // Triggered when the mouse is pressed down
 function pointerDownListener (e) {
@@ -192,11 +192,12 @@ function pointerMoveListener (e) {
     return;
   }
   if(isBarDown){
-    bar.position = "absolute";
-    bar.position.top=e.clientY;
-    bar.position.left=e.clientX - canvas.width/2;
-    bar.color = "blue";
-    console.log("Moved");
+    bar.style.top = e.clientY+"px";
+    bar.style.left = (e.clientX - canvas.width/2)+"px";
+	canvas.style.top = (e.clientY+30)+"px";
+    canvas.style.left = (e.clientX - canvas.width/2)+"px";
+    //bar.style.color = "blue";
+    //console.log("Moved "+e.clientX+", "+e.clientY);
   }else{
     var event = e || window.event; // IE uses window.event, not e
     var mouseX = event.clientX - canvas.offsetLeft;

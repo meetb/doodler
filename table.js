@@ -2,7 +2,7 @@ function addColumn(tblId)
 {
     var tblHeadObj = document.getElementById(tblId).tHead;
     for (var h=0; h<tblHeadObj.rows.length; h++) {
-        var newTH = document.createElement('th');
+        var newTH = document.createElement('td');
         tblHeadObj.rows[h].appendChild(newTH);
         newTH.innerHTML = '<textarea cols="1" rows="1" style="resize: none"/>'
     }

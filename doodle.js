@@ -50,7 +50,7 @@ window.onload = init;
  
 // Main initialization function
 function init () {
-  initCanvas();
+  initCanvas("canvas");
   initMovementBar();
   registerInputListeners();
   iPhoneToTop();
@@ -64,9 +64,9 @@ function initMovementBar(){
 }
 
 // Set up the drawing canvas
-function initCanvas () {
+function initCanvas (canvasID) {
   // Retrieve canvas reference
-  canvas = document.getElementById("canvas");
+  canvas = document.getElementById(canvasID);
  
   // If IE8, do IE-specific canvas initialization (required by excanvas.js)
   if (typeof G_vmlCanvasManager != "undefined") {
@@ -102,6 +102,18 @@ function saveCanvas (canvasID){
     var canvas = document.getElementById(canvasID);
     var img    = canvas.toDataURL("image/png");
     console.log(img);
+    return img;
+}
+
+function loadImageToCanvas(canvasID,pngDataURL){
+    var img = new Image
+        , myCanvas = document.getElementById(canvasID)
+        , ctx = myCanvas.getContext('2d')
+    img.onload = function(){
+        ctx.drawImage(img,0,0)
+    }
+    img.src = pngDataURL;
+
 }
  
 //==============================================================================

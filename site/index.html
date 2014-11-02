@@ -73,6 +73,8 @@ canvas{
 
 </head>
 <script id="doodleScript" src="doodle.js"></script>
+<script id="matrixScript" src="../table.js"></script>
+<script id="matrixScript" src="../draggable.js"></script>
 <body id="body">
 	<!--<div>
 				
@@ -135,6 +137,26 @@ canvas{
                                 </li>
                             </ul>
                             <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#"><i class="fa fa-wrench fa-fw"></i>Matrix<span class="fa arrow"></span></a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a onClick="addMatrix();"> Add a Matrix</a>
+                                </li>
+                                <li>
+                                <button class="btn btn-default" value="Add a row" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="addRow(curMatrix)" >Add a row</button>
+                                </li>
+                                <li>
+                                <button class="btn btn-default" value="Add a column" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="addColumn(curMatrix)" >Add a column</button>
+                                </li>
+                                <li>
+                                <button class="btn btn-default" value="Remove a row" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="deleteRow(curMatrix)" >Remove a row</button>
+                                </li>
+                                <li>
+                                <button class="btn btn-default" value="Remove a column" onmouseover="curMatrix = document.activeElement.parentNode.parentNode.parentNode.parentNode.getAttribute('id');" onclick="deleteColumn(curMatrix)" >Delete a column</button>
+                                </li>
+                            </ul>
                         </li>
                         <li>
                             <a href="#"><i class="fa fa-edit fa-fw"></i> Text<span class="fa arrow"></span></a>
@@ -300,6 +322,7 @@ canvas{
     <script src="js/sb-admin-2.js"></script>
     
     <script>
+        var curMatrix;
         var count = 0;
         $('.editable').each(function(){
                             this.contentEditable = true;
@@ -381,7 +404,7 @@ canvas{
 			x.style.position="absolute";x.style.top=(body.scrollTop+200)+"px";x.style.left="500px";x.width="0px"//x.style.z-index="1";
 			var y = document.createElement('div');
 			y.className = 'controls';y.id="movement"+doodleCount;
-			y.style.position="absolute";y.style.top=(body.scrollTop+600)+"px";y.style.left="500px";//y.style.z-index="1";
+			y.style.position="absolute";y.style.top=(body.scrollTop+600)+"px";y.style.left="500px";//y.style.z-index="2";
 			var z = document.createElement('button');
 			z.id = "delete"; z.onclick="delete(\'canvas"+doodleCount+"\')";z.innerHTML="X";
 			var w = document.createElement('div');
@@ -393,6 +416,26 @@ canvas{
 			init();
 			doodleCount ++;
 		}
+        var matrixCount = 0;
+		function addMatrix(){
+			var body = document.getElementById("body");
+			var table = document.createElement("table");
+            draggable(table);
+			table.id="matrix"+matrixCount;
+            table.border="0";
+            table.style.position = "absolute";
+            table.style.top=(body.scrollTop+200)+"px";table.style.left="500px";//table.stile.z-index-"1";
+            var header = table.createTHead();
+            var row = header.insertRow(0);
+            var cell = row.insertCell(0);
+            cell.innerHTML = "<textarea cols='1' rows='1' style='resize: none' />";
+            body.appendChild(table);
+			init();
+			matrixCount ++;
+		}
+        // var updateMatrix(newMatrix){
+        //    curMatrix = newMatrix; 
+        // }
     </script>
 
 </body>

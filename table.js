@@ -26,6 +26,7 @@ function addRow(tblId)
 
 {
   var tbl = document.getElementById(tblId);
+  console.log(tbl, tblId);
   var width = tbl.rows[0].cells.length
   var lastRow = tbl.rows.length;
   // if there's no header row in the table, then iteration = lastRow + 1
@@ -39,6 +40,7 @@ function addRow(tblId)
       textNode.cols = "1";
       textNode.rows = "1";
       textNode.style.resize = "none";
+      textNode.style.font="bold";
       cellLeft.appendChild(textNode);
   }
   

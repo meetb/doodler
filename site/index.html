@@ -32,12 +32,55 @@
         <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
         <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
     <![endif]-->
+	
+	<style type="text/css">
+html, body {
+  width:  100%;
+  height: 100%;
+}
+ 
+canvas{
+  background-color: #FFFFFF;
+  border: 1px solid lightgrey;
+  position: absolute;
+  top: 35px;
+}
+ 
+#status {
+  color: #FFFFFF;
+  position: absolute;
+  cursor: default;
+  font-family: Helvetica, Verdana, sans-serif;
+  font-weight: bold;
+  margin: 10px;
+  top: 30px;
+}
+ 
+.controls {
+  background-color: lightgrey;
+  position: absolute;
+  font-family: Helvetica, Verdana, sans-serif;
+  font-weight: bold;
+  font-size: smaller;
+  padding: 3px;
+  width: 596px;
+  height: 25px;
+}
+</style>
+	
+	
+	
 
 </head>
-<meta charset="UTF-8">
-
-<body>
-
+<script id="doodleScript" src="doodle.js"></script>
+<body id="body">
+	<!--<div>
+				
+				<canvas id="canvas0" class="doodle" style="position:absolute;top:0;left:0;z-index:1" ></canvas>
+				<div class="controls" id="movement0" style="position:absolute;top:400px;left:0;z-index:1">
+				<button id="delete" onclick="delete(\'canvas0\')">X</button>
+				<div id="thingabc0" align="right"><<<</div></div>
+				</div>-->
     <div id="wrapper">
 
         <!-- Navigation -->
@@ -82,7 +125,7 @@
                             <a href="#"><i class="fa fa-wrench fa-fw"></i> Doodle<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a> Add a Doodle</a>
+                                    <a onClick="addDoodle();"> Add a Doodle</a>
                                 </li>
                                 <li>
                                     <a> Pencil Colour</a>
@@ -97,7 +140,7 @@
                             <a href="#"><i class="fa fa-edit fa-fw"></i> Text<span class="fa arrow"></span></a>
                             <ul class="nav nav-second-level">
                                 <li>
-                                    <a onclick="myFunction()"> Add a TextBox</a>
+                                    <a onclick="myFunction();"> Add a TextBox</a>
                                 </li>
                                 <li>
                                     <a> Font Colour</a>
@@ -329,6 +372,27 @@
             x.contentEditable = true;
             $("#area-adder").append(x);
         }
+		var doodleCount=0;
+		function addDoodle(){
+			var body = document.getElementById("body");
+			var x = document.createElement('canvas');
+			x.id="canvas"+doodleCount;
+			x.className="doodle";
+			x.style.position="absolute";x.style.top=(body.scrollTop+200)+"px";x.style.left="500px";x.width="0px"//x.style.z-index="1";
+			var y = document.createElement('div');
+			y.className = 'controls';y.id="movement"+doodleCount;
+			y.style.position="absolute";y.style.top=(body.scrollTop+600)+"px";y.style.left="500px";//y.style.z-index="1";
+			var z = document.createElement('button');
+			z.id = "delete"; z.onclick="delete(\'canvas"+doodleCount+"\')";z.innerHTML="X";
+			var w = document.createElement('div');
+			w.id="thingabc"+doodleCount;w.align="right";w.innerHTML="<<<";
+			document.getElementById("body").appendChild(x);
+			y.appendChild(z);
+			y.appendChild(w);
+			document.getElementById("body").appendChild(y);
+			init();
+			doodleCount ++;
+		}
     </script>
 
 </body>

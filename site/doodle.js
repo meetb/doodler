@@ -223,6 +223,19 @@ function barDown(e){
 }
 // Triggered when the mouse is pressed down
 function pointerDownListener (e) {
+  localLineColor = document.getElementById("colourPick").value;
+  if(document.getElementById("eraser").checked){
+	localLineColor = "#FFFFFF";
+	localLineThickness = 40;
+  }else{
+    console.log("B");
+	localLineThickness = 2;
+  }
+  if( localLineThickness<1){
+	localLineThickness=1;
+  }else if (localLineThickness>60){
+	localLineThickness=60;
+  }
   // If this is an iPhone, iPad, Android, or other touch-capable device, ignore
   // simulated mouse input.
   if (hasTouch) {

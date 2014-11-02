@@ -301,12 +301,15 @@ function pointerMoveListener (e) {
   var mouseY = event.clientY - canvas.offsetTop + body.scrollTop;
   console.log(idNum+" "+isCornerDown+" "+isBarDown);
   if(isCornerDown){
+	var save = saveCanvas(canvas.getAttribute('id'));
     rect = canvas.getBoundingClientRect();
 	width = mouseX;
 	canvas.width = width<100?100:width;
 	bar.style.width = (width<100?100:width)+"px";
 	height = mouseY;
-	canvas.height = height<50?50:height;
+	canvas.height = (height<50?50:height);
+	bar.style.top = (rect.top+(height<50?50:height))+"px";
+	loadImageToCanvas(canvas.getAttribute('id'),save);
   }else if(isBarDown){
     bar.style.top = (e.clientY + body.scrollTop)+"px";
     bar.style.left = (e.clientX - canvas.width/2)+"px";

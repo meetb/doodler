@@ -236,7 +236,7 @@ canvas{
                             </ul>
                         </li>
                         <li>
-                            <a><i class="fa fa-files-o fa-fw"></i> Save</a>
+                            <a onclick="saveFile();"><i class="fa fa-files-o fa-fw"></i> Save</a>
                         </li>
                     </ul>
                 </div>
@@ -323,6 +323,8 @@ canvas{
             $("#area-adder").append(x);
         }
 		var doodleCount=0;
+        var doodleArray = new Array();
+        var matrixArray = new Array();
 		function addDoodle(){
 			var body = document.getElementById("body");
 			var x = document.createElement('canvas');
@@ -341,6 +343,7 @@ canvas{
 			y.appendChild(w);
 			document.getElementById("body").appendChild(y);
 			init();
+            doodleArray.push(x);
 			doodleCount ++;
 		}
         var matrixCount = 0;
@@ -358,8 +361,64 @@ canvas{
             cell.innerHTML = "<textarea cols='1' rows='1' style='resize: none' />";
             body.appendChild(table);
 			//init();
+            matrixArray.push(table)
 			matrixCount ++;
 		}
+
+        var setInfoX = function(type) { return function(event) {
+                return event.x;
+        }};
+        var setInfoY = function(type) { return function(event) {
+                return event.y;
+        }};
+
+        function saveFile(){
+            var i;
+            var output = {};
+            var text = new Array();
+            //first, text
+            for (i = 0; i < count; i++){
+                var element = document.getElementById("textarea"+(i+1));
+                var elementDict = {};
+                elementDict['id'] = "textarea"+(i+1);
+                if (element.style.display == "block"){
+                    elementDict['content'] = element.innerHTML;
+                }
+                text.push(elementDict);
+            }
+            output['text'] = text;
+
+            //second, doodles
+            var doodles = new Array();
+            for (i = 0; i < doodleCount; i++){
+                var element = document.getElementById("canvas"+i);
+                var elementDict = {};
+                elementDict['id'] = "canvas"+doodleCount;
+                elementDict['positionX'] = element.offsetLeft;
+                elementDict['positionY'] = element.offsetTop;
+                elementDict['image'] = saveCanvas("canvas"+i);
+                doodles.push(elementDict);
+            }
+            output['doodles'] = doodles;
+            console.log(output);
+
+            //third, matricies
+            var matrices = new Array();
+            for (i = 0; i < matrixCount; i++){
+                var j;
+                var element = document.getElementById("matrix"+matrixCount);
+                var elementDict = {};
+                elementDict['id'] = "matrix"+matrixCount;
+                <!-- elementDict['positionX'] = element.whenDragging(setInfoX('Dragging')); -->
+                <!-- elementDict['positionY'] = element.whenDragging(setInfoY('Dragging')); -->
+                elementDict['rows'] = element.rows.length;
+                elementDict['cols'] = element.rows[0].cells.length;
+                //var entries = new Array();
+                //for (i = 0; elementDict['entries'] =
+                matrices.push(elementDict);
+            }
+            coutput['matrices'] = matrices;
+        }
     </script>
 </body>
 

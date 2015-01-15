@@ -282,6 +282,57 @@ canvas{
     <script src="js/sb-admin-2.js"></script>
     
     <script>
+        function downloadURI(uri, fileName) {
+          var link = document.createElement("a");
+          link.download = name;
+          link.href = uri;
+          link.click();
+        }
+      
+
+        function structureFile(output){
+          var doodles = output.doodles;
+          var matrices = output.matrices;
+          var texts = output.text;
+          var file = "";
+          for (var i = 0; i < doodles.length; i++){
+            var doodle = doodles[i];
+            console.log(doodle.positionX);
+            console.log(doodle.positionY);
+            console.log(doodle.id);
+            console.log(doodle.image);
+            file += "newImageX:";
+            file += doodle.positionX + "Y:";
+            file += doodle.positionY + "ID:";
+            file += doodle.id + "IMAGE:";
+            file += doodle.image;
+          }
+          for (var i = 0; i < matrices.length; i++){
+            var matrix = matrices[i];
+            file += "newMatrixID:";
+            file += matrix.id+"rows:"; 
+            file += matrix.rows+"cols:"; 
+            file += matrix.cols; 
+          }
+          for (var i = 0; i < texts.length; i++){
+            var text = texts[i];
+            file += "newTextId:";
+            file += text.id+"content"; 
+            file += text.content; 
+          }
+
+          console.log(file);
+          var uri = 'data:text/csv;charset=utf-8,' + file;
+
+          var downloadLink = document.createElement("a");
+          downloadLink.href = uri;
+          downloadLink.download = "file.brd";
+
+          document.body.appendChild(downloadLink);
+          downloadLink.click();
+          document.body.removeChild(downloadLink);
+          return file;
+        }
         var curMatrix;
         var count = 0;
         $('.editable').each(function(){
@@ -348,7 +399,7 @@ canvas{
             doodleArray.push(x);
 			doodleCount ++;
 		}
-        var matrixCount = 0;
+    var matrixCount = 0;
 		function addMatrix(){
 			var body = document.getElementById("body");
 			var table = document.createElement("table");
@@ -373,6 +424,7 @@ canvas{
         var setInfoY = function(type) { return function(event) {
                 return event.y;
         }};
+
 
         function saveFile(){
             var i;
@@ -402,15 +454,14 @@ canvas{
                 doodles.push(elementDict);
             }
             output['doodles'] = doodles;
-            console.log(output);
 
             //third, matricies
             var matrices = new Array();
             for (i = 0; i < matrixCount; i++){
                 var j;
-                var element = document.getElementById("matrix"+matrixCount);
+                var element = document.getElementById("matrix"+i);
                 var elementDict = {};
-                elementDict['id'] = "matrix"+matrixCount;
+                elementDict['id'] = "matrix"+i;
                 <!-- elementDict['positionX'] = element.whenDragging(setInfoX('Dragging')); -->
                 <!-- elementDict['positionY'] = element.whenDragging(setInfoY('Dragging')); -->
                 elementDict['rows'] = element.rows.length;
@@ -419,8 +470,13 @@ canvas{
                 //for (i = 0; elementDict['entries'] =
                 matrices.push(elementDict);
             }
-            coutput['matrices'] = matrices;
+            output['matrices'] = matrices;
+            console.log(output);
+            var file = structureFile(output);
+            console.log(file);
+            downloadURI("data:"+file, "output.bar");
         }
+
     </script>
 </body>
 
